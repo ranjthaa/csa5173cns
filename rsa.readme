@@ -1,0 +1,31 @@
+# define public key
+e = 31
+n=3599
+
+# find p and q using factoring function
+def factorize(n):
+    for i in range(2, n):
+        if n % i == 0:
+            return i, n//i
+
+p, q = factorize(n)
+
+# calculate phi
+phi = (p - 1) * (q - 1)
+
+# find d such that e*d ≡ 1 mod phi
+def extended_gcd(a, b):
+    if b == 0:
+        return a, 1, 0
+    else:
+        d, x, y = extended_gcd(b, a % b)
+        return d, y, x - (a // b) * y
+
+d = extended_gcd(e, phi)[1]
+
+# make sure d is positive
+if d < 0:
+    d += phi
+
+# print private key
+print("The private key is:", d)
